@@ -87,6 +87,13 @@ func flatten(data interface{}, parents []string, result *[]string) {
 			parents = parents[0 : len(parents)-1]
 		}
 	default:
-		*result = append(*result, fmt.Sprintf("%v=%v\n", strings.Join(parents, "."), data))
+		switch d := data.(type) {
+		case string:
+			d = strings.Join(strings.Split(data.(string), "\n"), "")
+			*result = append(*result, fmt.Sprintf("%v=%s\n", strings.Join(parents, "."), d))
+		default:
+			*result = append(*result, fmt.Sprintf("%v=%s\n", strings.Join(parents, "."), data))
+		}
+
 	}
 }
